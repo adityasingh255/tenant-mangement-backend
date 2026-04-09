@@ -10,7 +10,10 @@ connectDB();
 const app = express();
 app.use(express.json());
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+    origin: ['https://tenant-mangement-frontend1-f7rjdz8kj-adityasingh255s-projects.vercel.app', 'http://localhost:3000'],
+    credentials: true
+}));
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }

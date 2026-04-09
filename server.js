@@ -10,8 +10,22 @@ connectDB();
 const app = express();
 app.use(express.json());
 app.use(helmet());
+const allowedOrigins = [
+    'https://tenant-mangement-frontend1-f7rjdz8kj-adityasingh255s-projects.vercel.app',
+    'http://localhost:3000'
+];
+
 app.use(cors({
-    origin: ['https://tenant-mangement-frontend1-f7rjdz8kj-adityasingh255s-projects.vercel.app', 'http://localhost:3000'],
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 }));
 if (process.env.NODE_ENV === 'development') {
